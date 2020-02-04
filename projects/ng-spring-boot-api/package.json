@@ -1,0 +1,18 @@
+{
+  "name": "ng-spring-boot-api",
+  "description": "Simple angular library to build static grid views.",
+  "author": {
+    "name": "Paul Sterl"
+  },
+  "keywords": [
+    "angular",
+    "spring boot",
+    "API"
+  ],
+  "license": "MIT",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^8.0.3",
+    "@angular/core": "^8.0.3"
+  }
+}
