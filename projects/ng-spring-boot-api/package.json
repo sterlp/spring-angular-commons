@@ -1,18 +1,29 @@
 {
-  "name": "ng-spring-boot-api",
-  "description": "Simple angular library to build static grid views.",
-  "author": {
-    "name": "Paul Sterl"
-  },
+  "name": "@sterlp/ng-spring-boot-api",
+  "description": "Angular lib to represent common Spring Boot types.",
+  "author": "Paul Sterl",
   "keywords": [
-    "angular",
-    "spring boot",
+    "Angular",
+    "Spring Boot",
     "API"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sterlp/spring-angular-commons/tree/master/projects/ng-spring-boot-api"
+  },
+  "homepage": "https://github.com/sterlp/spring-angular-commons",
+  "bugs": {
+    "url": "https://github.com/sterlp/spring-angular-commons/issues"
+  },
+  "markdown": "github",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^8.0.3",
     "@angular/core": "^8.0.3"
+  },
+  "main": "src/public-api.ts",
+  "scripts": {
+    "test": "ng test"
   }
 }
