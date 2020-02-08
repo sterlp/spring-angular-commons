@@ -1,5 +1,14 @@
 import { HttpParams } from '@angular/common/http';
 
+export enum SortDirection {
+    ASC = 'asc',
+    DESC = 'desc'
+}
+export interface Sort {
+    field: string;
+    direction: SortDirection;
+}
+
 /**
  * Interface for pagination information during a request.
  * ```
@@ -7,16 +16,22 @@ import { HttpParams } from '@angular/common/http';
  * ```
  */
 export class Pageable {
-    page = 0;
-    size = 25;
+    public static readonly DEFAULT_PAGE = 0;
+    public static readonly DEFAULT_SIZE = 25;
+    page = Pageable.DEFAULT_PAGE;
+    size = Pageable.DEFAULT_SIZE;
     sort: Sort[] = [];
 
+    /**
+     * Create a new Pageable with the given optional parameters
+     * @param page the page to request, default 0
+     * @param size the ammount of elements to read, default 25
+     */
+    // tslint:disable: curly
     static of(page?: number, size?: number): Pageable {
         const result = new Pageable();
-        // tslint:disable-next-line: curly
-        if (page != null) result.page = page;
-        // tslint:disable-next-line: curly
-        if (size != null) result.size = size;
+        if (page == null) result.page = Pageable.DEFAULT_PAGE;
+        if (size == null) result.size = Pageable.DEFAULT_SIZE;
         return result;
     }
 
@@ -28,8 +43,26 @@ export class Pageable {
         // tslint:disable-next-line: no-use-before-declare
         return this.addSort(field, SortDirection.DESC);
     }
-    addSort(field: string, direction: SortDirection): Pageable {
+    /**
+     * Add the given field into the sort list, empty field are ignored
+     * @param field field to use for the sort
+     * @param direction optional direction, default is ASC
+     */
+    addSort(field: string, direction: SortDirection = SortDirection.ASC): Pageable {
+        if (!direction) direction = SortDirection.ASC;
+        if (field && field.length > 0) {
         this.sort.push({field, direction});
+        }
+        return this;
+    }
+    /**
+     * Sets the given sort only
+     * @param field the field to sort for, if empty it is ignored
+     * @param direction the direction to sort
+     */
+    setSort(field: string, direction: SortDirection = SortDirection.ASC): Pageable {
+        this.sort.length = 0;
+        this.addSort(field, direction);
         return this;
     }
     /**
@@ -46,7 +79,8 @@ export class Pageable {
     }
     newHttpParams(): HttpParams {
         let result = new HttpParams()
-            .set('page', this.page.toString()).set('size', this.size.toString());
+            .set('page', this.page.toString())
+            .set('size', this.size.toString());
         if (this.sort && this.sort.length > 0) {
             this.sort.forEach(s => {
                 result = result.append('sort', s.field + ',' + s.direction);
@@ -57,12 +91,4 @@ export class Pageable {
     public toString(): string {
         return this.buildQuery();
     }
-}
-export enum SortDirection {
-    ASC = 'asc',
-    DESC = 'desc'
-}
-export interface Sort {
-    field: string;
-    direction: SortDirection;
 }

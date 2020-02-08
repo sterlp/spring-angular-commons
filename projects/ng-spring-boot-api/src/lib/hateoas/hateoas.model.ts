@@ -3,8 +3,8 @@
 export interface HateosEntityList<T, L extends HateosResourceLinks> {
     // tslint:disable-next-line: variable-name
     _embedded?: T;
-    _links: L;
     page: HateosPage;
+    _links?: L;
 }
 export interface HateosPage {
     /**

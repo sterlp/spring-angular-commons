@@ -13,6 +13,37 @@ describe('Spring Pageable', () => {
     expect(p.buildQuery()).toBe('page=3&size=10&sort=foo,asc');
   });
 
+  it('Pageable use defaults', () => {
+    const p = Pageable.of();
+
+    expect(p.size).toBe(Pageable.DEFAULT_SIZE);
+    expect(p.page).toBe(Pageable.DEFAULT_PAGE);
+  });
+
+  it('Set sort', () => {
+    const p = Pageable.of();
+    p.asc('foo');
+    p.desc('bar');
+
+    expect(p.sort.length).toBe(2);
+
+    p.setSort('aaa');
+    const params = p.newHttpParams();
+    expect(params.get('sort')).toBe('aaa,asc');
+  });
+
+  it('Clear sort', () => {
+    const p = Pageable.of();
+    p.asc('foo');
+    p.desc('bar');
+
+    expect(p.sort.length).toBe(2);
+
+    p.setSort(null);
+    const params = p.newHttpParams();
+    expect(params.get('sort')).toBe(null);
+  });
+
   it('Pageable newHttpParams', () => {
     const p = new Pageable().desc('foo');
     p.page = 10;
@@ -23,5 +54,4 @@ describe('Spring Pageable', () => {
     expect(params.get('size')).toBe('33');
     expect(params.get('sort')).toBe('foo,desc');
   });
-
 });
