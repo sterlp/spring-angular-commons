@@ -5,3 +5,5 @@ export * from './lib/ng-spring-boot-api.module';
 export * from './lib/data/page.model';
 export * from './lib/data/pageable.model';
 export * from './lib/hateoas/hateoas.model';
+export * from './lib/rest/spring.datasource';
+export * from './lib/rest/spring.resource';

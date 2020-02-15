@@ -17,7 +17,7 @@
     "url": "https://github.com/sterlp/spring-angular-commons/issues"
   },
   "markdown": "github",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "peerDependencies": {
     "@angular/common": "^8.0.3",
     "@angular/core": "^8.0.3"
@@ -25,5 +25,8 @@
   "main": "src/public-api.ts",
   "scripts": {
     "test": "ng test"
+  },
+  "dependencies": {
+    "@angular/cdk": "^9.0.0"
   }
 }

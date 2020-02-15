@@ -1,12 +1,12 @@
 // WIP
 
-export interface HateosEntityList<T, L extends HateosResourceLinks> {
+export interface HateoasEntityList<T, L extends HateoasResourceLinks> {
     // tslint:disable-next-line: variable-name
     _embedded?: T;
-    page: HateosPage;
+    page: HateoasPage;
     _links?: L;
 }
-export interface HateosPage {
+export interface HateoasPage {
     /**
      * Returns the number of the current {@link Slice}. Is always non-negative.
      */
@@ -21,7 +21,7 @@ export interface HateosPage {
     totalElements: number;
 }
 
-export interface HateosResourceLink {
+export interface HateoasResourceLink {
     href: string;
     /** Information if the URL supports a pageable request or not {?page,size,sort} */
     templated ?: boolean;
@@ -30,7 +30,7 @@ export interface HateosResourceLink {
 /**
  * Extend this interface to add your links
  */
-export interface HateosResourceLinks {
-    self: HateosResourceLink;
-    profile?: HateosResourceLink;
+export interface HateoasResourceLinks {
+    self: HateoasResourceLink;
+    profile?: HateoasResourceLink;
 }
