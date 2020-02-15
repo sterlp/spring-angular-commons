@@ -1,5 +1,5 @@
 import { Subscription, BehaviorSubject, Observable } from 'rxjs';
-import { Pageable } from '../data/pageable.model';
+import { Pageable, Sort } from '../data/pageable.model';
 import { SpringResourece } from './spring.resource';
 import { DataSource } from '@angular/cdk/table';
 import { CollectionViewer } from '@angular/cdk/collections';

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { Pageable } from '../data/pageable.model';
+import { Observable } from 'rxjs';
 
 /**
  * Simple abstract class build for a Spring REST service.
