@@ -45,6 +45,10 @@ export abstract class SpringDataSource<ListType, ResourceType, ServiceType exten
     private hateosSubject = new BehaviorSubject<ListType>(null);
     public hateosSubject$ = this.hateosSubject.asObservable();
 
+    get value(): ListType {
+        return this.hateosSubject.getValue();
+    }
+
     /**
      * Implement this method to extract the array of elements from the given ListType.
      * Return null will be converted into an empty new array.
