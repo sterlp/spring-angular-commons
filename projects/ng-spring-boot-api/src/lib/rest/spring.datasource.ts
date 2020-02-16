@@ -9,6 +9,10 @@ import { finalize, catchError } from 'rxjs/operators';
  * Error handler which allows to hook into the returned service errors.
  */
 export type DataSourceErrorHandler<ListType> = (error: any) => Observable<ListType>;
+/**
+ * Provides the ability to hook into the search call
+ * @returns Observable to use, or null to use default behavior.
+ */
 export type DataSourceLoadHook<ListType, ResourceType, ServiceType extends SpringResource<ListType, ResourceType>>
     = (service: ServiceType, page: Pageable) => Observable<ListType>;
 
@@ -108,9 +112,10 @@ export abstract class SpringDataSource<ListType, ResourceType, ServiceType exten
         this._loading.next(true);
 
         // allow a custom service call if a hook was provided
-        let l: Observable<ListType>;
+        let l: Observable<ListType> = null;
         if (this.loadHook) l = this.loadHook(this.service, this._page);
-        else l = this.service.list(this._page);
+        // check if hook was used, if not we do the list call ...
+        if (null == l) l = this.service.list(this._page);
 
         if (this.errorHandler) {
             l = l.pipe(

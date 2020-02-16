@@ -4,10 +4,14 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "prebuild": "rm -rf dist/",
     "build": "ng build",
     "test": "ng test",
+    "testonce": "ng test --watch=false",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "releasenpm": "cd dist/ng-spring-boot-api/ && npm publish --access public && cd ../..",
+    "release": "npm run build && npm run releasenpm"
   },
   "private": true,
   "dependencies": {

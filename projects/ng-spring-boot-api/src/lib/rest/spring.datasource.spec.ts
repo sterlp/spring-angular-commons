@@ -3,7 +3,6 @@ import { SpringDataSource } from './spring.datasource';
 import { SpringResource } from './spring.resource';
 import { Observable, of, throwError } from 'rxjs';
 import { first } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
 
 interface ListBean { foo?: string; }
 interface Bean {}
@@ -103,10 +102,13 @@ describe('Spring DataSource', () => {
 
         serviceSpy = spyOn(service, 'list').and.returnValue(of({foo: 'bar1'} as ListBean));
         serviceSpy = spyOn(service, 'search').and.returnValue(of({foo: 'bar2'} as ListBean));
+
+        subject.doLoad(33, 66);
+        subject.doLoad(33, 66);
         subject.doLoad(33, 66);
 
         expect(service.list).toHaveBeenCalledTimes(0);
-        expect(service.search).toHaveBeenCalledTimes(1);
+        expect(service.search).toHaveBeenCalledTimes(3);
 
         subject.hateosSubject$.subscribe(v => {
             expect(v).toEqual({foo: 'bar2'});

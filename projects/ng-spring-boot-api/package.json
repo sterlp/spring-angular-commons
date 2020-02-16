@@ -17,7 +17,7 @@
     "url": "https://github.com/sterlp/spring-angular-commons/issues"
   },
   "markdown": "github",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "peerDependencies": {
     "@angular/common": "^8.0.1",
     "@angular/core": "^8.0.1"
