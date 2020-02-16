@@ -1,10 +1,16 @@
 import { Subscription, BehaviorSubject, Observable } from 'rxjs';
 import { Pageable, Sort } from '../data/pageable.model';
-import { SpringResourece } from './spring.resource';
+import { SpringResource } from './spring.resource';
 import { DataSource } from '@angular/cdk/table';
 import { CollectionViewer } from '@angular/cdk/collections';
+import { finalize, catchError } from 'rxjs/operators';
 
-export type DataSourceErrorHandler = (operation: string, error: any) => Observable<any>;
+/**
+ * Error handler which allows to hook into the returned service errors.
+ */
+export type DataSourceErrorHandler<ListType> = (error: any) => Observable<ListType>;
+export type DataSourceLoadHook<ListType, ResourceType, ServiceType extends SpringResource<ListType, ResourceType>>
+    = (service: ServiceType, page: Pageable) => Observable<ListType>;
 
 /**
  * Default page request interface, like from Anular Material Paginator
@@ -17,9 +23,12 @@ export interface PageRequest {
     pageSize: number;
 }
 
-export abstract class SpringDataSource<ListType, ResourceType> implements DataSource<ResourceType> {
+export abstract class SpringDataSource<ListType, ResourceType, ServiceType extends SpringResource<ListType, ResourceType>>
+    implements DataSource<ResourceType> {
 
-    constructor(protected service: SpringResourece<ListType, ResourceType>, protected errorHandler?: DataSourceErrorHandler) {}
+    constructor(protected service: ServiceType,
+                protected errorHandler?: DataSourceErrorHandler<ListType>,
+                protected loadHook?: DataSourceLoadHook<ListType, ResourceType, ServiceType>) {}
 
     // tslint:disable: variable-name
     private _lastRequest: Subscription;
@@ -32,6 +41,7 @@ export abstract class SpringDataSource<ListType, ResourceType> implements DataSo
         return this._page;
     }
     private dataSubject = new BehaviorSubject<ResourceType[]>([]);
+    public dataSubject$ = this.dataSubject.asObservable();
     private hateosSubject = new BehaviorSubject<ListType>(null);
     public hateosSubject$ = this.hateosSubject.asObservable();
 
@@ -42,7 +52,7 @@ export abstract class SpringDataSource<ListType, ResourceType> implements DataSo
     abstract extractDataFromList(list: ListType): ResourceType[];
 
     connect(collectionViewer: CollectionViewer): Observable<ResourceType[] | readonly ResourceType[]> {
-        return this.dataSubject.asObservable();
+        return this.dataSubject$;
     }
 
     disconnect(collectionViewer: CollectionViewer): void {
@@ -88,21 +98,33 @@ export abstract class SpringDataSource<ListType, ResourceType> implements DataSo
     /**
      * Requests the data using the actual page.
      */
+    // tslint:disable: curly
     private _loadData() {
-        if (this._lastRequest) { // cancel any pending requests ...
+        this._cancel();
+        this._loading.next(true);
+
+        // allow a custom service call if a hook was provided
+        let l: Observable<ListType>;
+        if (this.loadHook) l = this.loadHook(this.service, this._page);
+        else l = this.service.list(this._page);
+
+        if (this.errorHandler) {
+            l = l.pipe(
+                finalize(() => this._loading.next(false)),
+                catchError(this.errorHandler)
+            );
+        } else {
+            l = l.pipe(
+                finalize(() => this._loading.next(false))
+            );
+        }
+        this._lastRequest = l.subscribe(result => this.setData(result));
+    }
+
+    private _cancel() {
+        if (this._lastRequest && this._lastRequest.unsubscribe) { // cancel any pending requests ...
             this._lastRequest.unsubscribe();
             this._lastRequest = null;
         }
-        this._loading.next(true);
-        this._lastRequest = this.service.list(this._page)
-            .subscribe(
-                result => this.setData(result),
-                e => this.errorHandler ? this.errorHandler('loadData', e) : console.warn('Failed to call:', this.service.listUrl, e),
-                () => {
-                    this._loading.next(false);
-                    this._lastRequest.unsubscribe();
-                    this._lastRequest = null;
-                }
-            );
     }
 }

@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
  * @template ListType the interface type returned for a list
  * @template ResourceType the interface type returned for a get
  */
-export abstract class SpringResourece<ListType, ResourceType>  {
+export abstract class SpringResource<ListType, ResourceType>  {
 
     constructor(protected http: HttpClient) { }
 
