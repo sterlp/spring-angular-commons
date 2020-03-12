@@ -24,6 +24,5 @@ jobs:
     - run: npm install -g @angular/cli > /dev/null
     - run: npm install > /dev/null
     - run: ng build
-    - run: ng test --watch=false
       env:
         CI: true
