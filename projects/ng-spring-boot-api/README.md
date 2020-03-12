@@ -1,7 +1,27 @@
+<p align="center">
+    <img alt="GitHub Actions status" src="https://github.com/sterlp/spring-angular-commons/workflows/Build%20Spring%20Angular/badge.svg">
+</p>
+
+# How to build and release
+
+- Adjust version
+- Clean all `rm -rf dist/`
+- Build all `ng test --watch=false`
+- Build all `ng build`
+- Commit
+- Login `npm login`
+
+## Publish ng-spring-boot-api
+- `cd dist/ng-spring-boot-api/`
+- `npm publish --access public`
+
+# Links
+- https://angular.io/guide/creating-libraries
 
 # Spring Boot API
 
-Simple TypeScript classes for common spring boot pojos.
+- Simple TypeScript classes for common spring boot pojos.
+- [spring-boot-api on npmjs](https://www.npmjs.com/package/@sterlp/ng-spring-boot-api)
 
 # How to use
 
@@ -72,4 +92,35 @@ Example based on a mterial table with a material paginator. Sorting included in 
     ngAfterViewInit(): void {
         this.yourDataSource.doLoad(this.paginator.pageIndex, this.paginator.pageSize);
     }
+```
+
+### SubscriptionsHolder
+
+Common problem is always to clean up all subscriptions if a component is destroyed. To support this the `SubscriptionsHolder` can be used.
+
+```typescript
+export class YourComponent implements OnDestroy {
+
+  private subs = new SubscriptionsHolder();
+
+  constructor(private router: Router) { }
+
+  ngOnInit() {
+    // e.g. subscribe to any route changes
+    this.subs.add(this.route.params.subscribe(params => {
+      // do what ever needs to be done ...
+    }));
+
+    // add custom code which should be executed too
+    this.subs.add({
+        close() {
+            // do cleanup stuff
+        }
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.subs.close(); // destroy all subscriptions ...
+  }
+}
 ```

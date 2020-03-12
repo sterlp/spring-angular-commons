@@ -9,3 +9,5 @@ export * from './lib/rest/spring.datasource';
 export * from './lib/rest/spring.resource';
 
 export * from './lib/error/spring-error.model';
+
+export * from './lib/util/subscription.util';

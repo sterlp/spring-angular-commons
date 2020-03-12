@@ -94,14 +94,14 @@ describe('Spring DataSource', () => {
     });
 
     it('DataSource search hook', () => {
+        serviceSpy = spyOn(service, 'list').and.returnValue(of({foo: 'bar1'} as ListBean));
+        serviceSpy = spyOn(service, 'search').and.returnValue(of({foo: 'bar2'} as ListBean));
+
         subject = new MySpringDataSource(service, null, (s, page) => {
             expect(page.page).toBe(33);
             expect(page.size).toBe(66);
             return s.search();
         });
-
-        serviceSpy = spyOn(service, 'list').and.returnValue(of({foo: 'bar1'} as ListBean));
-        serviceSpy = spyOn(service, 'search').and.returnValue(of({foo: 'bar2'} as ListBean));
 
         subject.doLoad(33, 66);
         subject.doLoad(33, 66);

@@ -93,3 +93,34 @@ Example based on a mterial table with a material paginator. Sorting included in 
         this.yourDataSource.doLoad(this.paginator.pageIndex, this.paginator.pageSize);
     }
 ```
+
+### SubscriptionsHolder
+
+Common problem is always to clean up all subscriptions if a component is destroyed. To support this the `SubscriptionsHolder` can be used.
+
+```typescript
+export class YourComponent implements OnDestroy {
+
+  private subs = new SubscriptionsHolder();
+
+  constructor(private router: Router) { }
+
+  ngOnInit() {
+    // e.g. subscribe to any route changes
+    this.subs.add(this.route.params.subscribe(params => {
+      // do what ever needs to be done ...
+    }));
+
+    // add custom code which should be executed too
+    this.subs.add({
+        close() {
+            // do cleanup stuff
+        }
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.subs.close(); // destroy all subscriptions ...
+  }
+}
+```
