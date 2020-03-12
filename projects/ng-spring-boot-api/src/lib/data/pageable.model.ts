@@ -14,6 +14,7 @@ export interface Sort {
  * ```
  * http://fooo:8080/api/bar?page=0&size=5&sort=name,desc
  * ```
+ * In addition filters are supported and appended.
  */
 export class Pageable {
     public static readonly DEFAULT_PAGE = 0;
@@ -21,6 +22,7 @@ export class Pageable {
     page = Pageable.DEFAULT_PAGE;
     size = Pageable.DEFAULT_SIZE;
     sort: Sort[] = [];
+    filter = new  Map<string, any>();
 
     /**
      * Create a new Pageable with the given optional parameters
@@ -51,8 +53,12 @@ export class Pageable {
     addSort(field: string, direction: SortDirection = SortDirection.ASC): Pageable {
         if (!direction) direction = SortDirection.ASC;
         if (field && field.length > 0) {
-        this.sort.push({field, direction});
+            this.sort.push({field, direction});
         }
+        return this;
+    }
+    addFilter(key: string, value: any): Pageable {
+        this.filter.set(key, value);
         return this;
     }
     /**
@@ -85,6 +91,9 @@ export class Pageable {
             this.sort.forEach(s => {
                 result = result.append('sort', s.field + ',' + s.direction);
             });
+        }
+        if (this.filter.size > 0) {
+            this.filter.forEach((v, k) => result = result.set(k, v));
         }
         return result;
     }

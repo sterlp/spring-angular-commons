@@ -54,4 +54,13 @@ describe('Spring Pageable', () => {
     expect(params.get('size')).toBe('33');
     expect(params.get('sort')).toBe('foo,desc');
   });
+
+  it('Pageable support custom filter', () => {
+    const params = Pageable.of(0, 25).desc('foo')
+      .addFilter('a', 'b')
+      .addFilter('b', false)
+      .newHttpParams();
+
+    expect(params.toString()).toBe('page=0&size=25&sort=foo,desc&a=b&b=false');
+  });
 });

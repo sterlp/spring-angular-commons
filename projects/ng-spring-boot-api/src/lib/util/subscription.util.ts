@@ -2,7 +2,7 @@ function isFunction(v: any): boolean {
     return v && typeof v === 'function';
 }
 export interface Closable {
-    close(): void;
+    close(): any;
 }
 
 export function isClosable(v: any): v is Closable {

@@ -1,23 +1,3 @@
-<p align="center">
-    <img alt="GitHub Actions status" src="https://github.com/sterlp/spring-angular-commons/workflows/Build%20Spring%20Angular/badge.svg">
-</p>
-
-# How to build and release
-
-- Adjust version
-- Clean all `rm -rf dist/`
-- Build all `ng test --watch=false`
-- Build all `ng build`
-- Commit
-- Login `npm login`
-
-## Publish ng-spring-boot-api
-- `cd dist/ng-spring-boot-api/`
-- `npm publish --access public`
-
-# Links
-- https://angular.io/guide/creating-libraries
-
 # Spring Boot API
 
 - Simple TypeScript classes for common spring boot pojos.
