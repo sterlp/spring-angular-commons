@@ -1,3 +1,7 @@
+<p align="center">
+    <img alt="GitHub Actions status" src="https://github.com/sterlp/spring-angular-commons/workflows/Build%20Spring%20Angular/badge.svg">
+</p>
+
 # How to build and release
 
 - Adjust version
@@ -16,7 +20,8 @@
 
 # Spring Boot API
 
-Simple TypeScript classes for common spring boot pojos.
+- Simple TypeScript classes for common spring boot pojos.
+- [spring-boot-api on npmjs](https://www.npmjs.com/package/@sterlp/ng-spring-boot-api)
 
 # How to use
 
