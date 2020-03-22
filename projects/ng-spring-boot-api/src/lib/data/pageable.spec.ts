@@ -16,8 +16,15 @@ describe('Spring Pageable', () => {
   it('Pageable use defaults', () => {
     const p = Pageable.of();
 
-    expect(p.size).toBe(Pageable.DEFAULT_SIZE);
     expect(p.page).toBe(Pageable.DEFAULT_PAGE);
+    expect(p.size).toBe(Pageable.DEFAULT_SIZE);
+  });
+
+  it('Pageable of marams', () => {
+    const p = Pageable.of(2, 7);
+
+    expect(p.page).toBe(2);
+    expect(p.size).toBe(7);
   });
 
   it('Set sort', () => {

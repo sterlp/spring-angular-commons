@@ -33,7 +33,9 @@ export class Pageable {
     static of(page?: number, size?: number): Pageable {
         const result = new Pageable();
         if (page == null) result.page = Pageable.DEFAULT_PAGE;
+        else result.page = page;
         if (size == null) result.size = Pageable.DEFAULT_SIZE;
+        else result.size = size;
         return result;
     }
 
