@@ -38,4 +38,7 @@ export abstract class SpringResource<ListType, ResourceType>  {
     create(entity: ResourceType): Observable<ResourceType> {
         return this.http.post<ResourceType>(`${this.listUrl}`, entity);
     }
+    delete(id?: number | string): Observable<void> {
+        return this.http.delete<void>(`${this.listUrl}/${id}`);
+    }
 }

@@ -47,7 +47,7 @@ import { HttpClient } from '@angular/common/http';
 import { SpringResourece } from '@sterlp/ng-spring-boot-api';
 
 @Injectable({ providedIn: 'root' })
-export class YourService extends SpringResourece<YourModelList, YourModel> {
+export class YourService extends SpringResource<YourModelList, YourModel> {
     constructor(http: HttpClient) { super(http); }
     get listUrl(): string { return '/api/your-resource-model'; }
 }
