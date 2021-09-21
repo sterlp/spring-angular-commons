@@ -1,9 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 
-export enum SortDirection {
-    ASC = 'asc',
-    DESC = 'desc'
-}
+export type SortDirection = 'asc' | 'desc' | '';
+
 export interface Sort {
     field: string;
     direction: SortDirection;
@@ -41,19 +39,19 @@ export class Pageable {
 
     asc(field: string): Pageable {
         // tslint:disable-next-line: no-use-before-declare
-        return this.addSort(field, SortDirection.ASC);
+        return this.addSort(field, 'asc');
     }
     desc(field: string): Pageable {
         // tslint:disable-next-line: no-use-before-declare
-        return this.addSort(field, SortDirection.DESC);
+        return this.addSort(field, 'desc');
     }
     /**
      * Add the given field into the sort list, empty field are ignored
      * @param field field to use for the sort
      * @param direction optional direction, default is ASC
      */
-    addSort(field: string, direction: SortDirection = SortDirection.ASC): Pageable {
-        if (!direction) direction = SortDirection.ASC;
+    addSort(field: string, direction: SortDirection = 'asc'): Pageable {
+        if (!direction) direction = 'asc';
         if (field && field.length > 0) {
             this.sort.push({field, direction});
         }
@@ -68,7 +66,7 @@ export class Pageable {
      * @param field the field to sort for, if empty it is ignored
      * @param direction the direction to sort
      */
-    setSort(field: string, direction: SortDirection = SortDirection.ASC): Pageable {
+    setSort(field: string, direction: SortDirection = 'asc'): Pageable {
         this.sort.length = 0;
         this.addSort(field, direction);
         return this;
@@ -80,7 +78,7 @@ export class Pageable {
         let query = `page=${this.page}&size=${this.size}`;
         if (this.sort && this.sort.length > 0) {
             this.sort.forEach(s => {
-                query += '&sort=' + s.field + ',' + s.direction;
+                query += `&sort=${s.field},${s.direction}`;
             });
         }
         return query;
@@ -91,7 +89,7 @@ export class Pageable {
             .set('size', this.size.toString());
         if (this.sort && this.sort.length > 0) {
             this.sort.forEach(s => {
-                result = result.append('sort', s.field + ',' + s.direction);
+                result = result.append('sort', `${s.field},${s.direction}`);
             });
         }
         if (this.filter.size > 0) {
